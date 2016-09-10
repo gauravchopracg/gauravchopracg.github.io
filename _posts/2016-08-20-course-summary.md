@@ -13,6 +13,8 @@ Write before job hunting. Life in CMU is like hardtack, real hard and substantia
 
 * [Probabilistic Graphical Models (10-708)](http://www.cs.cmu.edu/~epxing/Class/10708-16/lecture.html) (&#9733;&#9733;&#9733;&#9733;&#9734;). This course includes very heavy literature review. Of course it depends on you whether to read them carefully or not. A lot of emphasis is laid on Topic Models because of the research interest of the instructor and TAs. Homework requires very heavy mathematical derivations. Shortcoming of this course is that it lacks a little practice for some of the topics. Besides heavy derivations, we implemented trigram-HMM, parallel coordinate descent, sampling methods such as Metropolis–Hastings, Gibbs Sampling, etc.
 
+* [Topics in Deep Learning (10-807)](http://www.cs.cmu.edu/~rsalakhu/10807_2016/). Taking...
+
 ### Systems
 
 * [Introduction to Computer Systems (15-513)](https://www.cs.cmu.edu/~213/) (&#9733;&#9733;&#9733;&#9733;&#9733;&#127775;). This course is pre-requisite to many cs courses, and it's real fundamental. It's so famous that its course number is also the zip code of the university. It covers assembly, memory hierarchy, locality, linking, exceptional control flow, virtual memory, IO, networks, concurrency, which are truly fundamental for cs courses like os, compiler, architecture, networks, etc. Do take this course if you want to be a system programmer.
@@ -21,7 +23,11 @@ Write before job hunting. Life in CMU is like hardtack, real hard and substantia
 
 * [Distributed Systems (15-640)](http://www.cs.cmu.edu/~15-440/) (&#9733;&#9733;&#9733;&#9733;&#9734;). It teaches fundamental techniques used in distributed systems, such as Remote Procedure Call, Caching, Elasticity, Logging, Availability, etc, along with protocols such as Adaptive Replacement Cache, Gifford voting, Paxos, etc. Most of the time the instructor teaches philosophy about system design, such as one-copy semantics, trade-off between consistency and availability. Generally speaking, it's okey, except for two aspects. One thing is that the instructor taught a little bit too slow and answered a lot of unrelated questions in class. The other thing is that the homework were not well designed. The test cases were not given, students were confused what they were tested on. The TAs made a lot of traps in the test cases of auto graders, without letting students know where the traps were.
 
+* [Computer Networks (15-641)](http://www.cs.cmu.edu/~prs/15-441-F16/). Taking...
+
 ### Misc
+
+* [Computer Graphics (15-662)](http://15462.courses.cs.cmu.edu/fall2016/). Taking...
 
 * [Introduction to Computer Security (18-730)](http://www.ece.cmu.edu/~lbauer/courses/18730/f2015/)(&#9733;&#9733;&#9733;&#9733;&#9734;). It gives a general introduction of the topics in computer security, including elementary cryptography, protocol analysis, network security, and host/software security. Homework includes decrypting cbc cipher, convert-channel attack, and web attacks such as xss, csrf, sql injection. Shortcoming is that the material seems to be a little bit too abstract, and assumes a lot of backgrounds from students.
 
