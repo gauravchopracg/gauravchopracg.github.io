@@ -15,7 +15,7 @@ The parallel algorithm to solve this is called _parallel scan_. It can be genera
 
 _upsweep_ is to add the element to the other element that is $2^p$ away from it. For simplicity, the edge check is omitted.
 
-```
+```c
 void upsweep(int* a, int i, int p) {
   int d = 1 << p;
   a[i+d] += a[i];
@@ -24,7 +24,7 @@ void upsweep(int* a, int i, int p) {
 
 _downsweep_ is similar to _upsweep_, except that it will swap the element that was $2^p$ away to the current element.
 
-```
+```c
 void downsweep(int* a, int i, int p) {
   int d = 1 << p;
   int tmp = a[i];
@@ -35,7 +35,7 @@ void downsweep(int* a, int i, int p) {
 
 For simplicity, let's assume the length of array is magnitude of 2. If not, we can always allocate a larger array, with the rest of it wasted. Here's the pseudo code:
 
-```
+```c
 // Assume |a| has length 1 << q.
 void prefix_sum(int* a, int q) {
   int l = 1 << q;
