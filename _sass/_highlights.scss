@@ -1,5 +1,6 @@
-
-.highlight {
+// Github generated code will have an extra div with class highlight.
+// Let's only highlight the pre tag.
+pre.highlight {
   background-color: #efefef;
   padding: 7px 7px 7px 10px;
   border: 1px solid #ddd;
@@ -82,3 +83,4 @@ code {
 .highlight .vg { color: #268BD2 } /* Name.Variable.Global */
 .highlight .vi { color: #268BD2 } /* Name.Variable.Instance */
 .highlight .il { color: #2AA198 } /* Literal.Number.Integer.Long */
+
