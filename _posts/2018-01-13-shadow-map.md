@@ -197,7 +197,7 @@ gl.framebufferRenderbuffer(
 
 If we simply check the fragment-light distance vs the occluder-light distance, we would get something like this
 
-![]({{ BASE_PATH }}/20180113/shadow-acne.png)
+![]({{ BASE_PATH }}/images/20180113/shadow-acne.png)
 
 It's known as [shadow acne](https://computergraphics.stackexchange.com/a/2193). It happens because the pre-computed depth map is descrete, and there will be some belt regions where the fragment-light distance is farther in the descrete space, but the actual distance in the continuous space is closer. A simple workaround is to apply a bias on distance to digest the descrete error.
 
@@ -207,7 +207,7 @@ if (fragmentLightDist > occluderLightDist + kEps) {
 }
 ```
 
-![]({{ BASE_PATH }}/20180113/basic-shadow.png)
+![]({{ BASE_PATH }}/images/20180113/basic-shadow.png)
 
 ## Reference
 
