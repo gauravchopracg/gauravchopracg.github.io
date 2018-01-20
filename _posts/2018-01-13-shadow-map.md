@@ -11,7 +11,7 @@ Shadowmap builds on top of projections, so let's briefly review them.
 
 ### Perspective Projection
 
-Perspective projection maps a view frustum to unit cube ([figure](http://15462.courses.cs.cmu.edu/fall2016/lecture/texture/slide_018)). If we describe the view frustum with $x_{-1}$, $x_1$, $y_{-1}$, $y_1$, $z_{-1}$, $z_1$, then the matrix could be written as
+Perspective projection maps a view frustum to unit cube (or [NDC](https://computergraphics.stackexchange.com/a/1771), [figure](http://15462.courses.cs.cmu.edu/fall2016/lecture/texture/slide_018)). If we describe the view frustum with $x_{-1}$, $x_1$, $y_{-1}$, $y_1$, $z_{-1}$, $z_1$, then the matrix could be written as
 
 $$
 \begin{pmatrix}
@@ -26,7 +26,7 @@ Notice that $0 < z_{-1} < z_1$, because the camera looks at $-z$ by convention.
 
 ### Orthogonal Projection
 
-Orthogonal projection maps a cuboid to unit cube ([figure](http://songho.ca/opengl/files/gl_projectionmatrix02.png)). If we describe the cuboid with $x_{-1}$, $x_1$, $y_{-1}$, $y_1$, $z_{-1}$, $z_1$, then the matrix could be written as
+Orthogonal projection maps a cuboid to unit cube (or [NDC](https://computergraphics.stackexchange.com/a/1771), [figure](http://songho.ca/opengl/files/gl_projectionmatrix02.png)). If we describe the cuboid with $x_{-1}$, $x_1$, $y_{-1}$, $y_1$, $z_{-1}$, $z_1$, then the matrix could be written as
 
 $$
 \begin{pmatrix}
@@ -103,7 +103,7 @@ const projMatrix =
         /* zFar= */ 30);
 ```
 
-![](images/20180113/basic-scene.png)
+![]({{ BASE_PATH }}/images/20180113/basic-scene.png)
 
 ## Shadow Mapping
 
@@ -120,7 +120,7 @@ const viewMatrix =
         /* up= */ glm.vec3(0, 1, 0));
 ```
 
-![](images/20180113/depth-map.png)
+![]({{ BASE_PATH }}/images/20180113/depth-map.png)
 
 If it was directional light, the projection matrix also needs to be replaced with orthogonal projection matrix.
 
@@ -197,7 +197,7 @@ gl.framebufferRenderbuffer(
 
 If we simply check the fragment-light distance vs the occluder-light distance, we would get something like this
 
-![](20180113/shadow-acne.png)
+![]({{ BASE_PATH }}/20180113/shadow-acne.png)
 
 It's known as [shadow acne](https://computergraphics.stackexchange.com/a/2193). It happens because the pre-computed depth map is descrete, and there will be some belt regions where the fragment-light distance is farther in the descrete space, but the actual distance in the continuous space is closer. A simple workaround is to apply a bias on distance to digest the descrete error.
 
@@ -207,7 +207,7 @@ if (fragmentLightDist > occluderLightDist + kEps) {
 }
 ```
 
-![](20180113/basic-shadow.png)
+![]({{ BASE_PATH }}/20180113/basic-shadow.png)
 
 ## Reference
 
