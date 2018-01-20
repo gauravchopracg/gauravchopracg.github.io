@@ -213,6 +213,6 @@ if (fragmentLightDist > occluderLightDist + kEps) {
 
 * [Lecture](http://15462.courses.cs.cmu.edu/fall2016/lecture/transforms) on transforms.
 * Slide [16](http://15462.courses.cs.cmu.edu/fall2017/lecture/perspectivetexture/slide_016) and [19](http://15462.courses.cs.cmu.edu/fall2017/lecture/perspectivetexture/slide_019) on perspective projection.
-* [Nots](http://songho.ca/opengl/gl_projectionmatrix.html) on projection.
+* [Notes](http://songho.ca/opengl/gl_projectionmatrix.html) on projection.
 * [Tutorial](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/#the-model-view-and-projection-matrices) on model, view, projection.
 * [Tutorial](http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-16-shadow-mapping/) on shadow mapping.
