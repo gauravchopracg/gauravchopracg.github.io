@@ -111,7 +111,7 @@ The basic shadow mapping consists of two passes: the depth pass and the shadow p
 
 ### Depth Pass
 
-To compute the depth in the view of light, the logic of computing model, view, projection matrices could be reused. For example, if we want to put a light bulb at `(0, 10, 26)`, it's equivalent to putting a pinhole camera there.
+To compute the depth in the view of light, the logic of computing model, view, projection matrices could be reused. For example, if we want to put a light bulb at `(0, 10, 26)`, it's equivalent to putting a pinhole camera there. If it were directional light, the projection matrix also needs to be replaced with orthogonal projection matrix.
 
 ```js
 const viewMatrix =
@@ -120,9 +120,29 @@ const viewMatrix =
         /* up= */ glm.vec3(0, 1, 0));
 ```
 
+Vertex shader
+
+```glsl
+attribute vec3 aPos;
+uniform mat4 uLightMVP;
+
+void main() {
+  gl_Position = uLightMVP * vec4(aPos, 1);
+}
+```
+
+Fragment shader
+```glsl
+precision mediump float;
+
+void main() {
+  gl_FragColor = vec4(gl_FragCoord.zzz, 1);
+}
+```
+
 ![]({{ BASE_PATH }}/images/20180113/depth-map.png)
 
-If it was directional light, the projection matrix also needs to be replaced with orthogonal projection matrix.
+Take in mind that `gl_FragCoord.z` is in the range of `[0, 1]`. Later when we compare `fragmentLightDist` and `occluderLightDist`, we must make sure they are in the same measure space.
 
 ### Shadow Pass
 
@@ -149,6 +169,12 @@ and have put them in the depth map $Y_l$. If we say $y_l=(y_l^1, y_l^2, y_l^3, 1
 To put it in shaders, the vertex shader needs to compute $x_c$ and $x_l$ for each $x$.
 
 ```glsl
+const mat4 kBias = mat4(
+    vec4(0.5, 0.0, 0.0, 0.0),
+    vec4(0.0, 0.5, 0.0, 0.0),
+    vec4(0.0, 0.0, 0.5, 0.0),
+    vec4(0.5, 0.5, 0.5, 1.0));
+
 attribute vec4 aPos;
 uniform mat4 uCameraMVP;
 uniform mat4 uLightMVP;
@@ -156,7 +182,7 @@ varying vec4 vLightCoord;
 
 void main() {
   gl_Position = uCameraMVP * aPos;
-  vLightCoord = uLightMVP * aPos;
+  vLightCoord = kBias * uLightMVP * aPos;
 }
 ```
 
@@ -176,6 +202,8 @@ void main() {
   }
 }
 ```
+
+Notice that we need to apply a `kBias` besides `uLightMVP`. That's for ease of texture sampling, and also guarantees that the depth range is the same as was computed before in the depth pass. By doing this, we guarantee that `lightCoord.xyz`, after normalizing the `w` component, are all within the range of `[0, 1]`.
 
 ### Depth Map as Texture
 
