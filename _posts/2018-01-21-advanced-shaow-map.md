@@ -65,7 +65,7 @@ Given a pre-computed depth map and a texture coordinate $(x, y)$, the $z_o$ samp
 
 However, in PCF we have to apply a convolution kernel per fragment in the shadow pass, which could be expensive if the kernel size is very large. Then someone asks the question: can we pre-compute the convolution in the depth pass, and only sample from one texel in the shadow pass? One of the benefits is that, if the light doesn't move, in other words, the pre-computed depth map doesn't change, the shadow pass could be much rendered much faster.
 
-Actually, to sample $z_o$ from a window, we may not need all the values from it; some statistics about the window might be good enough. In [Variance Shadow Map](http://www.punkuser.net/vsm/vsm_paper.pdf), the author proposes to collect the first two moments per window in the depth pass, and model the visibility as
+Actually, to sample $z_o$ from a window, we don't need all the values from it; some statistics about the window might be good enough. In [Variance Shadow Maps](http://www.punkuser.net/vsm/vsm_paper.pdf), the author proposes to collect the first two moments per window in the depth pass, and model the visibility as
 
 $$
 V(z_o, z_f) = P(z_o \ge z_f) \le \frac{\sigma^2}{\sigma^2 + (z_f - \mu)^2}
@@ -78,7 +78,31 @@ $$
 \sigma^2 = E(z_o^2) - E(z_o)^2
 $$
 
-$z_o$'s are sampled per window, so they could be pre-computed via convolution.
+$z_o$'s are sampled per window, so they could be pre-computed via convolution. For clarity, let's say the pre-computed result will have each texel being the weighted average of $(0, 0, z^2, z)$ of a window around it. Given a texel sample, and the fragment-light distance, we can compute the visibility as following
+
+```glsl
+float computeVisibility(vec4 depthMapSample, float fragLightDist) {
+  float mu = depthMapSample.w;
+  if (mu > fragLightDist) {
+    return 1.;
+  }
+  float mu2 = mu * mu;
+  float sigma2 = clamp(depthMapSample.z - mu2, 1e-8, 1e8);
+  float fragOccluderDist = fragLightDist - mu;
+  float fragOccluderDist2 = fragOccluderDist * fragOccluderDist;
+  return sigma2 / (sigma2 + fragOccluderDist2);
+}
+```
+
+Notice that we applied a trick by early return at `mu > fragLightDist`. Otherwise, there will be very bad artifact at fragment where $z_f < z_o$ for real.
+
+![]({{ BASE_PATH }}/images/20180121/bad-variance-shadow.png)
+
+From math, we can easily analyze the side effect of the term $(z_f - \mu)^2$, so to avoid the risk, we simply ignore this term when $z_f < \mu$.
+
+![]({{ BASE_PATH }}/images/20180121/variance-shadow.png)
+
+This method is not perfect neither. Notice that we modeled the visibility as upper bound of $P(z_o \ge z_f)$. The upper bound may not be tight, so there's chance that the visibility is greater than its true value. The consequence is that some region will be brighter than what it should be, and this artifact is known as _Light Bleeding_.
 
 ### Moment Shadow Maps
 
