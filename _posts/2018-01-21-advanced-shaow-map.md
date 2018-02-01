@@ -78,16 +78,16 @@ $$
 \sigma^2 = E(z_o^2) - E(z_o)^2
 $$
 
-$z_o$'s are sampled per window, so they could be pre-computed via convolution. For clarity, let's say the pre-computed result will have each texel being the weighted average of $(0, 0, z^2, z)$ of a window around it. Given a texel sample, and the fragment-light distance, we can compute the visibility as following
+$z_o$'s are sampled per window, so they could be pre-computed via convolution. For clarity, let's say the pre-computed result will have each texel being the weighted average of $(z, z^2, 0, 1)$ of a window around it. Given a texel sample, and the fragment-light distance, we can compute the visibility as following
 
 ```glsl
 float computeVisibility(vec4 depthMapSample, float fragLightDist) {
-  float mu = depthMapSample.w;
+  float mu = depthMapSample.x;
   if (mu > fragLightDist) {
     return 1.;
   }
   float mu2 = mu * mu;
-  float sigma2 = clamp(depthMapSample.z - mu2, 1e-8, 1e8);
+  float sigma2 = clamp(depthMapSample.y - mu2, 1e-8, 1e8);
   float fragOccluderDist = fragLightDist - mu;
   float fragOccluderDist2 = fragOccluderDist * fragOccluderDist;
   return sigma2 / (sigma2 + fragOccluderDist2);
@@ -105,6 +105,68 @@ From math, we can easily analyze the side effect of the term $(z_f - \mu)^2$, so
 This method is not perfect neither. Notice that we modeled the visibility as upper bound of $P(z_o \ge z_f)$. The upper bound may not be tight, so there's chance that the visibility is greater than its true value. The consequence is that some region will be brighter than what it should be, and this artifact is known as _Light Bleeding_.
 
 ### Moment Shadow Maps
+
+Is it possible to get a closer upper bound given more moments? The answer is yes. In [Moment Shadow Maps](http://momentsingraphics.de/?page_id=51), the author generalizes the problem as [Hamburger Moment Problem](https://en.wikipedia.org/wiki/Hamburger_moment_problem), and gives the following solution with 4 moments.
+
+* Let $b = (z, z^2, z^3, z^4)$
+* Let $b' = (1 - \alpha) \cdot b + \alpha \cdot (0., .63, 0., .63)^T$, $\alpha = 9 \cdot 10^{-3}$
+* Solve $c$ with Cholesky decomposition
+
+$$
+\begin{pmatrix}
+  1 & b_1' & b_2' \\
+  b_1' & b_2' & b_3' \\
+  b_2' & b_3' & b_4'
+\end{pmatrix}
+\cdot c =
+\begin{pmatrix}
+  1 \\ z_f \\ z_f^2
+\end{pmatrix}
+$$
+
+* Solve $d_1 \le d_2$ for
+
+$$
+c_3 \cdot d^2 + c_2 \cdot d + c_1 = 0
+$$
+
+* Compute visibility given $z_f$, $b'$, $d$.
+
+$$
+V = \begin{cases}
+  1 &, z_f \le d_1 \\
+  1 - \frac{z_f d_2 - b_1'(z_f + d_2) + b_2'}{(d_2 - d_1)(z_f - d_1)} &, d_1 < z_f \le d_2 \\
+  \frac{d_1 d_2 - b_1' (d_1 + d_2) + b_2'}{(z_f - d_1) (z_f - d_2)} &, z_f > d_2
+\end{cases}
+$$
+
+```glsl
+float computeVisibility(vec4 depthMapSample, float fragLightDist) {
+  float alpha = 9e-3;
+  vec4 b = (1. - alpha) * depthMapSample + alpha * vec4(0., .63, 0, .63);
+  mat3 B = mat3(
+      1.0, b.x, b.y,
+      b.x, b.y, b.z,
+      b.y, b.z, b.w);
+  float zf = fragLightDist;
+  vec3 z = vec3(1, zf, zf * zf);
+  vec3 c = inverse(B) * z;
+  float sqrtDelta = sqrt(c.y * c.y - 4. * c.z * c.x);
+  float d1 = (-c.y - sqrtDelta) / (2. * c.z);
+  float d2 = (-c.y + sqrtDelta) / (2. * c.z);
+  if (zf <= d1) {
+    return 1.;
+  } else if (zf <= d2) {
+    return 1. - (zf * d2 - b.x * (zf + d2) + b.y) / ((d2 - d1) * (zf - d1));
+  } else {
+    return (d1 * d2 - b.x * (d1 + d2) + b.y) / ((zf - d1) * (zf - d2));
+  }
+}
+```
+
+![]({{ BASE_PATH }}/images/20180121/moment-shadow.png)
+
+### Quantization
 
 TODO
 
