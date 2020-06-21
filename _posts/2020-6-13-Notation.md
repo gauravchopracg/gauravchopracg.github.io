@@ -35,7 +35,7 @@ We will also use $X^(i)$ to denote the ith training example so, to refer to 't't
 
 Whereas $T_x$ will denote the length of a sequence then different examples in your training set can have different lengths. So, $T_x^(i)$ would be the input sentence length for training example i
 
-As $y^(i)<t>$ means the 't'th element in the output sequence of training example and $T_y^(i) will be the length of the output sequence in the ith training example
+As $y^(i)<t>$ means the 't'th element in the output sequence of training example and $T_y^(i)$ will be the length of the output sequence in the ith training example
 
 $x^{1}$ $x^{2}$ $x^{3}$
 
