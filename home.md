@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Home
-permalink: /index/
+permalink: /home/
 ---
 
 Hi, my name is Gaurav. I’m a deep learning enthusiast, who loves to tinker with smartphones and engines when I have time.
