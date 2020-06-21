@@ -30,6 +30,8 @@ To split the text into tokens or meaningful words using white spaces, we can use
 
 | This | is  | Andrew's | text, | isn't | it? |
 | ---- | --- | -------- | ----- | ----- | --- |
+| This | is  | Andrew's | text, | isn't | it? |
+| ---- | --- | -------- | ----- | ----- | --- |
 
 However, the problem is ‘text,’ and ‘text’ are two different words for tokenizer similarly ‘it’ and ‘it?’ we might want to merge these two tokens because they have essentially the same meaning,.
 
@@ -40,6 +42,8 @@ Similarly as before, we can split the text by punctuation using nltk.tokenize.Wo
 
  | This | is  | Andrew |  '  |  s  | text |  ,  | isn |  '  |  t  |  it |  ?  |
  | ---- | --- | ------ | --- | --- | ---- | --- | --- | --- | --- | --- | --- |
+ | This | is  | Andrew |  '  |  s  | text |  ,  | isn |  '  |  t  |  it |  ?  |
+ | ---- | --- | ------ | --- | --- | ---- | --- | --- | --- | --- | --- | --- |
 
 the problem is ‘s’, ‘isn’ ‘t’ are not very meaningful and punctuation are different tokens hence, it doesn’t make sense to analyze them
 
@@ -47,6 +51,8 @@ the problem is ‘s’, ‘isn’ ‘t’ are not very meaningful and punctuatio
 
 We can also come up with a set of rules or heuristics which can be easily found in TreebankWordTokenizer and it actually uses grammar rules of english language to make it tokenization that actually makes sense for further analysis. In reality this is very close to perfect tokenization that we want for English language
 
+| This |  is | Andrew | 's  | text |  ,  | is  | n't |  it |  ?  |
+| ---- | --- | ------ | --- | ---- | --- | --- | --- | --- | --- | 
 | This |  is | Andrew | 's  | text |  ,  | is  | n't |  it |  ?  |
 | ---- | --- | ------ | --- | ---- | --- | --- | --- | --- | --- | 
 
