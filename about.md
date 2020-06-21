@@ -4,11 +4,10 @@ title: About
 permalink: /about/
 ---
 
-* I write code.
-* I watch anime.
-* [Resume](https://github.com/misaka-10032/Resume/blob/master/resume.pdf)
+Hi, my name is Gaurav. I’m a deep learning enthusiast, who loves to tinker with smartphones and engines when I have time.
 
-### Fun projects
+When I’m not coding for my research, I am working on projects using open source data, writing tutorials to share what I learn or repairing stuffs.
 
-* [Particle System Simulation](https://misaka-10032.github.io/particle-system/)
-* [LSTM in Halide](http://misaka-10032.github.io/Halstm/)
+Thanks for stopping by, I hope you find something useful or interesting. If you do, be sure to leave a comment.
+
+### Gaurav
